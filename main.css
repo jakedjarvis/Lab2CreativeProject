@@ -1,0 +1,12 @@
+#map {
+        height: 400px;
+        width: 100%;
+}
+
+#addressInput{
+	margin: 15px;
+}
+
+h1{
+	text-align: center;
+}

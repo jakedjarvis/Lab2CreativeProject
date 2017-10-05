@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" type="text/css" href="main.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+
+
+  </head>
+  <body>
+    <h1>World Explorer</h1>
+
+    <div id="addressInput">
+      <form>
+        <p>Enter a place you'd like to visit: <input id="addressBox" type="text" name="fname">&nbsp;
+        <input type="submit" value="Submit" id="submitButton"></p>
+      </form>
+    </div>
+
+    <div id="map"></div>
+
+    
+
+    <script>
+      var map;
+
+      function initMap() {
+        var uluru = {lat: 33.4152, lng: -111.8315};
+        map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 4,
+          center: uluru
+        });
+        var marker = new google.maps.Marker({
+          position: uluru,
+          map: map
+        });
+      }
+      $("#submitButton").click(function(e){
+        e.preventDefault();
+
+        var address = $("#addressBox").val();
+
+        var url = "https://maps.googleapis.com/maps/api/geocode/json?address=" + address + "&key=AIzaSyBBoxYNXDdyVRvtJrm88ytC2U00D4WaDEM";
+
+        $.ajax({
+          url: url,
+          dataType: "json",
+          success: function(parsed_json){
+            console.log(parsed_json);
+
+            var latandlng = parsed_json["results"][0]["geometry"]["location"];
+
+
+
+
+            map.setCenter(latandlng);
+
+          }});
+
+
+
+      });
+    </script>
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAFi7c2Ncb82Dqm3coibqfxnN209OiOcig&callback=initMap">
+    </script>
+  </body>
+</html>
