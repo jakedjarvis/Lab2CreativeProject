@@ -15,28 +15,47 @@
         <p>Enter a place you'd like to visit: <input id="addressBox" type="text" name="fname">&nbsp;
         <input type="submit" value="Submit" id="submitButton"></p>
       </form>
+
+      <div id="locationDisplay">
+        <h4>You are currently in:</h4>
+        <div id="currentLoc"></div>
+          <p id="default">Mesa, AZ</p>
+      </div>
     </div>
 
     <div id="map"></div>
 
     
+    <div>
+      <h2>Places you've visited:</h2>
+      <ul>
+        <div id="visitedList">
+        </div>
+      </ul>
+    </div>
 
     <script>
       var map;
+      var marker;
+      var lat;
+      var lng;
+      var markerCount = 0;
 
       function initMap() {
         var uluru = {lat: 33.4152, lng: -111.8315};
         map = new google.maps.Map(document.getElementById('map'), {
-          zoom: 4,
+          zoom: 12,
           center: uluru
         });
-        var marker = new google.maps.Marker({
+        marker = new google.maps.Marker({
           position: uluru,
           map: map
         });
       }
       $("#submitButton").click(function(e){
         e.preventDefault();
+
+        $("#visitedList").append("<li>" + $("#addressBox").val() + "</li>");
 
         var address = $("#addressBox").val();
 
@@ -50,16 +69,23 @@
 
             var latandlng = parsed_json["results"][0]["geometry"]["location"];
 
+            var address = parsed_json["results"][0]["formatted_address"];
 
+            $("#default").empty();
+            $("#currentLoc").html("<p>" + address + "</p>");
+
+            //var city = parsed_json["results"][0]["address_components"][2]"[long_name"];
+            //var state = parsed_json["results"][0]["address_components"][4]"[long_name"];
+
+            //$("#currentLoc").html(city + " ", + state);
 
 
             map.setCenter(latandlng);
 
-          }});
 
+          }});//end of ajax call
 
-
-      });
+      });//end of submit button function
     </script>
     <script async defer
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAFi7c2Ncb82Dqm3coibqfxnN209OiOcig&callback=initMap">
